@@ -81,7 +81,7 @@
 			// - SET DEFAULT BREADCRUMB PATH SEPARATOR
 			// - set(breadcrumbSeparator="chars") --> (config/settings.cfm)
 			if ( !isDefined("application.wheels.breadcrumbSeparator") ) {
-				application.wheels.breadcrumbSeparator = "<span class='divider'>></span>";
+				application.wheels.breadcrumbSeparator = "<span class='divider'>/</span>";
 			}
 
 			// - SET DEFAULT BREADCRUMB PROHIBITED ACTION LIST
@@ -133,13 +133,13 @@
 			loc.settings.contentForPageTitle   = application.wheels.contentForPageTitle;
 
 			loc.settings.breadcrumb = {};
-			loc.settings.breadcrumb.breadcrumbPrefix         = application.wheels.breadcrumbPrefix;
-			loc.settings.breadcrumb.breadcrumbPrefixText     = application.wheels.breadcrumbPrefixText;
-			loc.settings.breadcrumb.breadcrumbPrefixLink     = application.wheels.breadcrumbPrefixLink;
-			loc.settings.breadcrumb.breadcrumbClass          = application.wheels.breadcrumbClass;
-			loc.settings.breadcrumb.breadcrumbActiveClass    = application.wheels.breadcrumbActiveClass;
-			loc.settings.breadcrumb.breadcrumbBlackList = application.wheels.breadcrumbBlackList;
-			loc.settings.breadcrumb.breadcrumbSeparator      = application.wheels.breadcrumbSeparator;
+			loc.settings.breadcrumb.breadcrumbPrefix      = application.wheels.breadcrumbPrefix;
+			loc.settings.breadcrumb.breadcrumbPrefixText  = application.wheels.breadcrumbPrefixText;
+			loc.settings.breadcrumb.breadcrumbPrefixLink  = application.wheels.breadcrumbPrefixLink;
+			loc.settings.breadcrumb.breadcrumbClass       = application.wheels.breadcrumbClass;
+			loc.settings.breadcrumb.breadcrumbActiveClass = application.wheels.breadcrumbActiveClass;
+			loc.settings.breadcrumb.breadcrumbBlackList   = application.wheels.breadcrumbBlackList;
+			loc.settings.breadcrumb.breadcrumbSeparator   = application.wheels.breadcrumbSeparator;
 			
 			loc.settings.page = {};
 			loc.settings.page.pageTitlePrefix = application.wheels.pageTitlePrefix;
@@ -151,7 +151,7 @@
 		 * @hint Create content for breadcrumb & page title (automatic)
 		 * ---------------------------------------------------------------------------------------------------
 		*/
-		public function createBreadcrumb(array params) {
+		public void function createBreadcrumb(array params) {
 
 			if ( application.wheels.contentForBreadcrumb || application.wheels.contentForPageTitle ) {
 				// Manual breadcrumb creation
@@ -249,7 +249,7 @@
 		}
 
 		/* ---------------------------------------------------------------------------------------------------
-		 * @hint Add breadcrumb and page title (Add to contentFor)
+		 * @hint Add breadcrumb and page title to the contentFor function
 		 * ---------------------------------------------------------------------------------------------------
 		*/
 		public void function addContentFor(required string breadcrumb) {
@@ -275,7 +275,7 @@
 		 * @hint Init breadcrumb (Add prefix link to breadcrumb)
 		 * ---------------------------------------------------------------------------------------------------
 		*/
-		public function initBreadcrumb(required array breadcrumbArray) {
+		public string function initBreadcrumb(required array breadcrumbArray) {
 			var loc = arguments;
 
 			loc.breadcrumb = "";
@@ -307,7 +307,7 @@
 		 * @hint Clean breadcrumb array (Remove prohibited word/action from array)
 		 * ---------------------------------------------------------------------------------------------------
 		*/
-		public function cleanBreadcrumbArray(required array breadcrumbArray) {
+		public array function cleanBreadcrumbArray(required array breadcrumbArray) {
 			var loc = arguments;
 
 			for (loc.i IN ListToArray(application.wheels.breadcrumbBlackList)) {
