@@ -27,9 +27,9 @@
 						<ul class="small">
 							<li>Automatically create a breadcrumb trail navigation based on your controller/action.</li>
 							<li>Manually build your breadcrumb trail navigation by passing an array of struct in your controller's action.</li>
-							<li>Exclude certain word/action by creating a "black list".</li>
+							<li>Exclude certain words from your breadcrumb trail navigation by creating a "black list".</li>
 							<li>Customize the hierarchy separator and styles of the breadcrumb trail navigation.</li>
-							<li>As a bonus, the plugin can also set the title of your HTML page based on the breadcrumb trail.</li>
+							<li>The plugin can also set the title of your HTML page based on the breadcrumb trail. You can also set the page title manually if needs be.</li>
 							<li>Can be use in conjunction with the <a href="http://cfwheels.org/plugins/listing/89" target="_blank">Localizator</a> plugin, to add localization (translation) capabilities.</li>
 						</ul>
 					</div>

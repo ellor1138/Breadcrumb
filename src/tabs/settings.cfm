@@ -64,12 +64,12 @@
 							</ul>
 						</dd>
 						<dt>Hyphen check</dt>
-						<dd>When enabling the hyphen check, the plugin will replace the hyphen with the hierarchy separator, creating two separate links. See image for clarification. (Default=false)
+						<dd>When enabling the hyphen check, the plugin will replace the hyphen with the hierarchy separator, creating two separate links. (Default=false)
 							<ul>
 								<li><u>set(breadcrumbHyphenCheck=boolean)</u></li>
 							</ul>
-							<div class="well">
-								<img src="/plugins/Breadcrumb/src/images/breadcrumbHyphenCheck.png">
+							<div style="padding-top:20px !important;">
+								<img src="https://github.com/ellor1138/Breadcrumb/blob/master/src/images/breadcrumbHyphenCheck.png?raw=true" style="padding:10px; border:1px solid ##c4c4c4;">
 							</div>
 						</dd>
 					</dl>
