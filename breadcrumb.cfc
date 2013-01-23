@@ -90,6 +90,12 @@
 				application.wheels.breadcrumbBlackList = "";
 			}
 
+			// - SET DEFAULT BREADCRUMB HYPHEN CHECK
+			// - set(breadcrumbHyphenCheck=boolean) --> (config/settings.cfm)
+			if ( !isDefined("application.wheels.breadcrumbHyphenCheck") ) {
+				application.wheels.breadcrumbHyphenCheck = false;
+			}
+
 			// SET DEFAULT PAGE TITLE PREFIX
 			// - set(pageTitlePrefix="string") --> (config/settings.cfm)
 			if ( !isDefined("application.wheels.pageTitlePrefix") ) {
@@ -138,8 +144,9 @@
 			loc.settings.breadcrumb.breadcrumbPrefixLink  = application.wheels.breadcrumbPrefixLink;
 			loc.settings.breadcrumb.breadcrumbClass       = application.wheels.breadcrumbClass;
 			loc.settings.breadcrumb.breadcrumbActiveClass = application.wheels.breadcrumbActiveClass;
-			loc.settings.breadcrumb.breadcrumbBlackList   = application.wheels.breadcrumbBlackList;
 			loc.settings.breadcrumb.breadcrumbSeparator   = application.wheels.breadcrumbSeparator;
+			loc.settings.breadcrumb.breadcrumbBlackList   = application.wheels.breadcrumbBlackList;
+			loc.settings.breadcrumb.breadcrumbHyphenCheck = application.wheels.breadcrumbHyphenCheck;
 			
 			loc.settings.page = {};
 			loc.settings.page.pageTitlePrefix = application.wheels.pageTitlePrefix;
@@ -151,7 +158,7 @@
 		 * @hint Create content for breadcrumb & page title (automatic)
 		 * ---------------------------------------------------------------------------------------------------
 		*/
-		public void function createBreadcrumb(array params) {
+		public void function createBreadcrumbAndTitle(array params) {
 
 			if ( application.wheels.contentForBreadcrumb || application.wheels.contentForPageTitle ) {
 				// Manual breadcrumb creation
@@ -202,7 +209,7 @@
 					loc.breadcrumbArray = cleanBreadcrumbArray(loc.breadcrumbArray);
 
 					for (loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
-						if ( loc.pathInfoArray[loc.i] CONTAINS "-") {
+						if ( loc.pathInfoArray[loc.i] CONTAINS "-" && application.wheels.breadcrumbHyphenCheck ) {
 							loc.subController = loc.breadcrumbArray[loc.i];
 							loc.subSection    = ListToArray(loc.breadcrumbArray[loc.i], "-");
 							for (loc.x = 1; loc.x <= ArrayLen(loc.subSection); loc.x++) {
@@ -246,6 +253,10 @@
 				
 				addContentFor(loc.breadcrumb);
 			}
+		}
+
+		public string function setPageTitle(required string title="") {
+			contentFor(pageTitle=arguments.title, overwrite=true);
 		}
 
 		/* ---------------------------------------------------------------------------------------------------

@@ -46,7 +46,7 @@
 							</ul>
 						</dd>
 						<dt>Breadcrumb active class</dt>
-						<dd>The class to be append to the &lt;li&gt; tag of the breadcrumb trail navigation. (Default="active")
+						<dd>The class to be append to the &lt;li&gt; tag of the active element of the breadcrumb trail navigation. (Default="active")
 							<ul>
 								<li><u>set(breadcrumbActiveClass="string")</u></li>
 							</ul>
@@ -56,6 +56,21 @@
 							<ul>
 								<li><u>set(breadcrumbSeparator="string")</u></li>
 							</ul>
+						</dd>
+						<dt>Breadcrumb black list</dt>
+						<dd>You can set a black list of terms the plugin should remove from the breadcrumb navigation list. (Default="")
+							<ul>
+								<li><u>set(breadcrumbBlackList="string,string,string")</u></li>
+							</ul>
+						</dd>
+						<dt>Hyphen check</dt>
+						<dd>When enabling the hyphen check, the plugin will replace the hyphen with the hierarchy separator, creating two separate links. See image for clarification. (Default=false)
+							<ul>
+								<li><u>set(breadcrumbHyphenCheck=boolean)</u></li>
+							</ul>
+							<div class="well">
+								<img src="/plugins/Breadcrumb/src/images/breadcrumbHyphenCheck.png">
+							</div>
 						</dd>
 					</dl>
 				</div>
@@ -68,7 +83,7 @@
 							</ul>
 						</dd>
 						<dt>Page title prefix</dt>
-						<dd>To add a prefix to the page title. (Default="cgi.remote_addr")
+						<dd>Text prefix to be added to the page title. (Default="cgi.remote_addr")
 							<ul>
 								<li><u>set(pageTitlePrefix="string")</u></li>
 							</ul>
