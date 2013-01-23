@@ -96,6 +96,12 @@
 				application.wheels.breadcrumbHyphenCheck = false;
 			}
 
+			// - SET FLAG TO HIDE KEY IN BREADCRUMB
+			// - set(breadcrumbHideKey=boolean) --> (config/settings.cfm)
+			if ( !isDefined("application.wheels.breadcrumbHideKey") ) {
+				application.wheels.breadcrumbHideKey = true;
+			}
+
 			// SET DEFAULT PAGE TITLE PREFIX
 			// - set(pageTitlePrefix="string") --> (config/settings.cfm)
 			if ( !isDefined("application.wheels.pageTitlePrefix") ) {
@@ -158,11 +164,11 @@
 		 * @hint Create content for breadcrumb & page title (automatic)
 		 * ---------------------------------------------------------------------------------------------------
 		*/
-		public void function createBreadcrumbAndTitle(array params) {
+		public void function createBreadcrumbAndTitle(params) {
 
 			if ( application.wheels.contentForBreadcrumb || application.wheels.contentForPageTitle ) {
 				// Manual breadcrumb creation
-				if ( isDefined("arguments.params") ) {
+				if ( isDefined("arguments.params") && isArray(arguments.params) ) {
 					loc       = arguments;
 					loc.class = application.wheels.breadcrumbActiveClass;
 					
@@ -195,9 +201,14 @@
 
 				// Automatic breadcrumb creation
 				} else {
-					var loc = {};
+					if ( isDefined("arguments.params") ) {
+						var loc = arguments;
+					} else {
+						var loc = {};
 
-					loc.params    = params;
+						loc.params = params;
+					}
+
 					loc.separator = application.wheels.breadcrumbSeparator;
 					loc.class     = application.wheels.breadcrumbActiveClass;
 
@@ -208,8 +219,12 @@
 					loc.breadcrumb      = initBreadcrumb(loc.breadcrumbArray);
 					loc.breadcrumbArray = cleanBreadcrumbArray(loc.breadcrumbArray);
 
+					if ( StructKeyExists(loc.params, "title") ) {
+						ArrayAppend(loc.breadcrumbArray, loc.params.title);
+					}
+
 					for (loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
-						if ( loc.pathInfoArray[loc.i] CONTAINS "-" && application.wheels.breadcrumbHyphenCheck ) {
+						if ( loc.i <= ArrayLen(loc.pathInfoArray) && loc.pathInfoArray[loc.i] CONTAINS "-" && application.wheels.breadcrumbHyphenCheck ) {
 							loc.subController = loc.breadcrumbArray[loc.i];
 							loc.subSection    = ListToArray(loc.breadcrumbArray[loc.i], "-");
 							for (loc.x = 1; loc.x <= ArrayLen(loc.subSection); loc.x++) {
@@ -321,11 +336,20 @@
 		public array function cleanBreadcrumbArray(required array breadcrumbArray) {
 			var loc = arguments;
 
+			if ( application.wheels.breadcrumbHideKey ) {
+				for ( loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
+					if ( isNumeric(loc.breadcrumbArray[loc.i]) ) {
+						ArrayDeleteAt(loc.breadcrumbArray, loc.i);
+					}
+				}
+			}
+
 			for (loc.i IN ListToArray(application.wheels.breadcrumbBlackList)) {
 				if ( ArrayContains(loc.breadcrumbArray, loc.i) ) {
 					ArrayDeleteAt(loc.breadcrumbArray, ArrayFind(loc.breadcrumbArray, loc.i));
 				}
 			}
+			
 			return loc.breadcrumbArray;
 		}
 
