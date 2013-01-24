@@ -13,7 +13,7 @@ Breadcrumb is a breadcrumb trail navigation generator plugin for ColdFusion on W
 * Can be use in conjunction with the <a href="https://github.com/ellor1138/Localizator" target="_blank">Localizator</a> plugin, to add localization (translation) capabilities.
 
 ## The Latest Version
-* The latest version of this plugin can be found at the Github project page at https://github.com/ellor1138/Breadcrumb
+The latest version of this plugin can be found at the Github project page at https://github.com/ellor1138/Breadcrumb
 
 ## Documentation
 Documentation for this project can be found at https://github.com/ellor1138/Breadcrumb/wiki
