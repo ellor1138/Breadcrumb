@@ -51,6 +51,10 @@
 								<cfinclude template="tabs/log.cfm">
 								<cfinclude template="tabs/credits.cfm">
 							</div>
+							<p></p>
+							<div class="well well-small" style="text-align:center; margin-bottom:0;">
+								<span class="label label-inverse">Info</span> &nbsp;&nbsp;The breadcrumb plugin will render a breadcrumb trail navigation in the same format as the Bootstrap breadcrumb component <a href="http://twitter.github.com/bootstrap/components.html##breadcrumbs" target="_blank">http://twitter.github.com/bootstrap</a>
+							</div>
 						</div>
 					</div>
 				</div>

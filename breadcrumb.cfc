@@ -90,12 +90,6 @@
 				application.wheels.breadcrumbBlackList = "";
 			}
 
-			// - SET DEFAULT BREADCRUMB HYPHEN CHECK
-			// - set(breadcrumbHyphenCheck=boolean) --> (config/settings.cfm)
-			if ( !isDefined("application.wheels.breadcrumbHyphenCheck") ) {
-				application.wheels.breadcrumbHyphenCheck = false;
-			}
-
 			// - SET FLAG TO HIDE KEY IN BREADCRUMB
 			// - set(breadcrumbHideKey=boolean) --> (config/settings.cfm)
 			if ( !isDefined("application.wheels.breadcrumbHideKey") ) {
@@ -152,7 +146,6 @@
 			loc.settings.breadcrumb.breadcrumbActiveClass = application.wheels.breadcrumbActiveClass;
 			loc.settings.breadcrumb.breadcrumbSeparator   = application.wheels.breadcrumbSeparator;
 			loc.settings.breadcrumb.breadcrumbBlackList   = application.wheels.breadcrumbBlackList;
-			loc.settings.breadcrumb.breadcrumbHyphenCheck = application.wheels.breadcrumbHyphenCheck;
 			
 			loc.settings.page = {};
 			loc.settings.page.pageTitlePrefix = application.wheels.pageTitlePrefix;
@@ -168,7 +161,7 @@
 
 			if ( application.wheels.contentForBreadcrumb || application.wheels.contentForPageTitle ) {
 				// Manual breadcrumb creation
-				if ( isDefined("arguments.params") && isArray(arguments.params) ) {
+				if ( isDefined("arguments.params") ) {
 					loc       = arguments;
 					loc.class = application.wheels.breadcrumbActiveClass;
 					
@@ -201,14 +194,9 @@
 
 				// Automatic breadcrumb creation
 				} else {
-					if ( isDefined("arguments.params") ) {
-						var loc = arguments;
-					} else {
-						var loc = {};
+					var loc = {};
 
-						loc.params = params;
-					}
-
+					loc.params    = params;
 					loc.separator = application.wheels.breadcrumbSeparator;
 					loc.class     = application.wheels.breadcrumbActiveClass;
 
@@ -219,12 +207,12 @@
 					loc.breadcrumb      = initBreadcrumb(loc.breadcrumbArray);
 					loc.breadcrumbArray = cleanBreadcrumbArray(loc.breadcrumbArray);
 
-					if ( StructKeyExists(loc.params, "title") ) {
-						ArrayAppend(loc.breadcrumbArray, loc.params.title);
+					if ( StructKeyExists(loc.params, "appendTitle") ) {
+						ArrayAppend(loc.breadcrumbArray, loc.params.appendTitle);
 					}
 
 					for (loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
-						if ( loc.i <= ArrayLen(loc.pathInfoArray) && loc.pathInfoArray[loc.i] CONTAINS "-" && application.wheels.breadcrumbHyphenCheck ) {
+						if ( StructKeyExists(loc.params, "separateHyphens") &&  loc.i == 1 && FindNoCase("-", loc.pathInfoArray[loc.i]) && ArrayLen(ListToArray(loc.pathInfoArray[loc.i], "-")) EQ 2 ) {
 							loc.subController = loc.breadcrumbArray[loc.i];
 							loc.subSection    = ListToArray(loc.breadcrumbArray[loc.i], "-");
 							for (loc.x = 1; loc.x <= ArrayLen(loc.subSection); loc.x++) {
@@ -232,31 +220,30 @@
 									loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.subSection[loc.x])), controller=loc.subSection[loc.x]) & loc.separator & "</li>";				
 								} else if ( loc.x == 2 && loc.i != ArrayLen(loc.pathInfoArray) ) { 
 									loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.subSection[loc.x])), controller=loc.subController) & loc.separator & "</li>";
-								} else {
-									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & capitalize(getTranslation(loc.subSection[loc.x])) & "</li>";
 								}
 							}
 						} else {
 							if ( loc.i == ArrayLen(loc.breadcrumbArray) ) {
-								if ( isDefined("loc.params.title") ) {
-									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & capitalize(getTranslation(loc.params.title)) & "</li>";							
+								if ( isNumeric(loc.breadcrumbArray[loc.i]) && application.wheels.breadcrumbHideKey ) {
 								} else {
 									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & capitalize(getTranslation(loc.breadcrumbArray[loc.i])) & "<li>";
 								}
 							} else {
 								if ( loc.i == 1 ) {
 									loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), controller=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
-								} else if ( loc.i == ArrayLen(loc.breadcrumbArray) - 1 ) {
-									if ( isDefined("loc.params.key") ) {
-										loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), controller=loc.params.controller, action=loc.params.action, key=loc.params.key) & loc.separator & "</li>";
-									}
 								} else {
-									if ( isDefined("loc.subController") ) {
-										loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), controller=loc.subController, action=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
-										StructDelete(loc, "sub");
-										StructDelete(loc, "subController");
+									if ( isNumeric(loc.breadcrumbArray[loc.i]) && application.wheels.breadcrumbHideKey ) {
+
+									} else {
+										loc.z = loc.i + 1;
+										if ( isNumeric(loc.breadcrumbArray[loc.z]) ) {
+											if ( loc.z == ArrayLen(loc.breadcrumbArray) ) {
+												loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), controller=loc.params.controller, action=loc.params.action, key=loc.breadcrumbArray[loc.z]) & "</li>";
+											} else {
+												loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), controller=loc.params.controller, action=loc.params.action, key=loc.breadcrumbArray[loc.z]) & loc.separator & "</li>";
+											}
+										}
 									}
-									
 								}
 							}
 						}
@@ -336,13 +323,13 @@
 		public array function cleanBreadcrumbArray(required array breadcrumbArray) {
 			var loc = arguments;
 
-			if ( application.wheels.breadcrumbHideKey ) {
+			/* if ( application.wheels.breadcrumbHideKey ) {
 				for ( loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
 					if ( isNumeric(loc.breadcrumbArray[loc.i]) ) {
 						ArrayDeleteAt(loc.breadcrumbArray, loc.i);
 					}
 				}
-			}
+			} */
 
 			for (loc.i IN ListToArray(application.wheels.breadcrumbBlackList)) {
 				if ( ArrayContains(loc.breadcrumbArray, loc.i) ) {
