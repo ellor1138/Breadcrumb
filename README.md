@@ -7,15 +7,16 @@ Breadcrumb is a breadcrumb trail navigation generator plugin for ColdFusion on W
 #### Benefits of using this plugin:
 * Automatically create a breadcrumb trail navigation based on your controller/action.
 * Manually build your breadcrumb trail navigation by passing an array of struct in your controller's action.
+* Exclude certain words from your breadcrumb trail navigation by creating a "black list".
 * Customize the hierarchy separator and styles of the breadcrumb trail navigation.
-* As a bonus, the plugin can also set the title of your HTML page based on the breadcrumb trail.
+* The plugin can also set the title of your HTML page based on the breadcrumb trail. You can also set the page title manually if needs be.
 * Can be use in conjunction with the <a href="https://github.com/ellor1138/Localizator" target="_blank">Localizator</a> plugin, to add localization (translation) capabilities.
 
 ## The Latest Version
 * The latest version of this plugin can be found at the Github project page at https://github.com/ellor1138/Breadcrumb
 
 ## Documentation
-Coming soon!
+Documentation for this project can be found at https://github.com/ellor1138/Breadcrumb/wiki
 
 ## Issues
 Problems or issues with this plugin can be found at https://github.com/ellor1138/Breadcrumb/issues

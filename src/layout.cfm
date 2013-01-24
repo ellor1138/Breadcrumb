@@ -1,6 +1,6 @@
 <cfoutput>
 	<cfscript>
-		loc = initBreadcrumbSettings();
+		loc = getBreadcrumbSettings();
 	</cfscript>
 
 	<!DOCTYPE html>
