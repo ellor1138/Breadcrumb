@@ -1,6 +1,6 @@
 <cfoutput>
 	<cfscript>
-		loc = application.wheels.breadcrumbSettings;
+		loc = initBreadcrumbSettings();
 	</cfscript>
 
 	<!DOCTYPE html>

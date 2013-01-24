@@ -86,6 +86,9 @@
 	.tab-pane dl dd ul {margin:2px 0 0 20px !important;}
 	.tab-pane dl dd ul li {line-height:16px;}
 
+	dl.single dt {margin-bottom:4px;}
+	dl.single dd {margin-bottom:4px;}
+
 	ul.breadcrumb {padding-left:14px !important; margin-left:0 !important;}
 	ul.breadcrumb li {padding:10px 0 !important;}
 	ul.breadcrumb li a:link, 

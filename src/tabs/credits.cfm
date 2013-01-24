@@ -1,6 +1,6 @@
 <cfoutput>
 	<div class="tab-pane" id="Credits">
-		<dl class="dl-horizontal">
+		<dl class="dl-horizontal single">
 			<dt>Author</dt>
 			<dd>#loc.plugin.author#</dd>
 			<dt>Plugin name</dt>

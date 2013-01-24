@@ -114,13 +114,13 @@
 						</div>
 						<div class="tab-pane" id="Manual2">
 							<h4>Manual usage</h4>
-							<p>You can set the page title manually by passing a string in your controller's action.</p>
+							<p>You can set the page title manually by passing a string in the setBreadcrumbPageTitle() function in your controller's action.</p>
 							<div class="well">
 								public function index() {<br>
-								&nbsp;&nbsp;&nbsp;setPageTitle("Welcome!");<br>
+								&nbsp;&nbsp;&nbsp;setBreadcrumbPageTitle("Welcome!");<br>
 								}
 							</div>
-							<p><span class="label label-inverse">Info</span> Using the setPageTitle() function will bypass the contentForPageTitle() check and the pageTitlePrefix() setting.</p>
+							<p><span class="label label-inverse">Info</span> Using the setBreadcrumbPageTitle() function will bypass the contentForPageTitle() check and the pageTitlePrefix() setting.</p>
 						</div>
 					</div>
 				</div>

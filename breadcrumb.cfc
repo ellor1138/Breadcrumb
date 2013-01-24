@@ -102,8 +102,6 @@
 				application.wheels.pageTitlePrefix = cgi.remote_addr;
 			}
 
-			application.wheels.breadcrumbSettings = initBreadcrumbSettings();
-
 			this.version = "1.1.8";
 
 			return this;
@@ -114,14 +112,6 @@
 		 * ---------------------------------------------------------------------------------------------------
 		*/
 		public struct function getBreadcrumbSettings() {
-			return application.wheels.breadcrumbSettings;
-		}
-
-		/* ---------------------------------------------------------------------------------------------------
-		 * @hint Init plugin config
-		 * ---------------------------------------------------------------------------------------------------
-		*/
-		public struct function initBreadcrumbSettings() {
 			var loc = {};
 
 			loc.plugin = {};
@@ -134,21 +124,22 @@
 			loc.plugin.issues        = "https://github.com/ellor1138/breadcrumb/issues";
 
 			loc.settings = {};
-			loc.settings.breadcrumbIsLocalized = application.wheels.breadcrumbIsLocalized;
-			loc.settings.contentForBreadcrumb  = application.wheels.contentForBreadcrumb;
-			loc.settings.contentForPageTitle   = application.wheels.contentForPageTitle;
+			loc.settings.isLocalized          = application.wheels.breadcrumbIsLocalized;
+			loc.settings.contentForBreadcrumb = application.wheels.contentForBreadcrumb;
+			loc.settings.contentForPageTitle  = application.wheels.contentForPageTitle;
 
 			loc.settings.breadcrumb = {};
-			loc.settings.breadcrumb.breadcrumbPrefix      = application.wheels.breadcrumbPrefix;
-			loc.settings.breadcrumb.breadcrumbPrefixText  = application.wheels.breadcrumbPrefixText;
-			loc.settings.breadcrumb.breadcrumbPrefixLink  = application.wheels.breadcrumbPrefixLink;
-			loc.settings.breadcrumb.breadcrumbClass       = application.wheels.breadcrumbClass;
-			loc.settings.breadcrumb.breadcrumbActiveClass = application.wheels.breadcrumbActiveClass;
-			loc.settings.breadcrumb.breadcrumbSeparator   = application.wheels.breadcrumbSeparator;
-			loc.settings.breadcrumb.breadcrumbBlackList   = application.wheels.breadcrumbBlackList;
+			loc.settings.breadcrumb.prefix      = application.wheels.breadcrumbPrefix;
+			loc.settings.breadcrumb.prefixText  = application.wheels.breadcrumbPrefixText;
+			loc.settings.breadcrumb.prefixLink  = application.wheels.breadcrumbPrefixLink;
+			loc.settings.breadcrumb.class       = application.wheels.breadcrumbClass;
+			loc.settings.breadcrumb.activeClass = application.wheels.breadcrumbActiveClass;
+			loc.settings.breadcrumb.separator   = application.wheels.breadcrumbSeparator;
+			loc.settings.breadcrumb.blackList   = application.wheels.breadcrumbBlackList;
+			loc.settings.breadcrumb.hideKey     = application.wheels.breadcrumbHideKey;
 			
 			loc.settings.page = {};
-			loc.settings.page.pageTitlePrefix = application.wheels.pageTitlePrefix;
+			loc.settings.page.titlePrefix = application.wheels.pageTitlePrefix;
 
 			return loc;
 		}
@@ -188,7 +179,6 @@
 							} else {
 								loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";	
 							}
-							
 						}
 					}
 
@@ -257,7 +247,11 @@
 			}
 		}
 
-		public string function setPageTitle(required string title="") {
+		/* ---------------------------------------------------------------------------------------------------
+		 * @hint Set page title <title>...</title>
+		 * ---------------------------------------------------------------------------------------------------
+		*/
+		public string function setBreadcrumbPageTitle(required string title="") {
 			contentFor(pageTitle=arguments.title, overwrite=true);
 		}
 
@@ -322,14 +316,6 @@
 		*/
 		public array function cleanBreadcrumbArray(required array breadcrumbArray) {
 			var loc = arguments;
-
-			/* if ( application.wheels.breadcrumbHideKey ) {
-				for ( loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
-					if ( isNumeric(loc.breadcrumbArray[loc.i]) ) {
-						ArrayDeleteAt(loc.breadcrumbArray, loc.i);
-					}
-				}
-			} */
 
 			for (loc.i IN ListToArray(application.wheels.breadcrumbBlackList)) {
 				if ( ArrayContains(loc.breadcrumbArray, loc.i) ) {
