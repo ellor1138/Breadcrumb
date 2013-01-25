@@ -39,6 +39,12 @@
 								<li><u>set(breadcrumbPrefixLink="{route=' ', controller=' ', action=' '}")</u></li>
 							</ul>
 						</dd>
+						<dt>Breadcrumb prefix class <span class="pull-right" style="font-weight:normal;">Default: "home"</span></dt>
+						<dd>The string to be used for the breadcrumb prefix class.
+							<ul>
+								<li><u>set(breadcrumbPrefixClass="string")</u></li>
+							</ul>
+						</dd>
 						<dt>Breadcrumb class <span class="pull-right" style="font-weight:normal;">Default: "breadcrumb"</span></dt>
 						<dd>The class to be append to the &lt;ul&gt; tag of the breadcrumb trail navigation.
 							<ul>
@@ -61,6 +67,12 @@
 						<dd>You can set a black list of terms the plugin should remove from the breadcrumb navigation list.
 							<ul>
 								<li><u>set(breadcrumbBlackList="string,string,string")</u></li>
+							</ul>
+						</dd>
+						<dt>Hide key <span class="pull-right" style="font-weight:normal;">Default: false</span></dt>
+						<dd>You can hide the key from the breadcrumb trail navigation.
+							<ul>
+								<li><u>set(breadcrumbHideKey=boolean)</u></li>
 							</ul>
 						</dd>
 					</dl>
