@@ -287,6 +287,15 @@
 				loc.title = ReReplace(loc.title,'<[^>]*>',' ~ ','all');
 				loc.title = ReReplaceNoCase(loc.title,'~','','all');
 
+				if ( application.wheels.breadcrumbPrefix ) {
+					loc.separator = ReReplaceNoCase(application.wheels.breadcrumbSeparator,'<[^>]*>','','all');
+					
+					loc.title = ReplaceNoCase(loc.title,l(application.wheels.breadcrumbPrefixText),'','all');
+					loc.title = ReplaceNoCase(loc.title, '#loc.separator##loc.separator#','#loc.separator#','all');
+					loc.title = ReplaceNoCase(loc.title, '#loc.separator#','','');
+					loc.title = ReplaceNoCase(loc.title, '#loc.separator#',' #loc.separator# ','all');
+				}
+
 				contentFor(pageTitle=loc.title, overwrite=true);
 			}
 		}
