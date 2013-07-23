@@ -207,51 +207,34 @@
 					if ( StructKeyExists(loc.params, "appendTitle") ) {
 						ArrayAppend(loc.breadcrumbArray, loc.params.appendTitle);
 					}
-					
+
+					// writeDump(#application.wheels.rootPath#);
+					// abort;
+
 					for (loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
-						if ( (StructKeyExists(loc.params, "separateHyphens") && loc.params.separateHyphens) &&  loc.i == 1 && FindNoCase("-", loc.pathInfoArray[loc.i]) && ArrayLen(ListToArray(loc.pathInfoArray[loc.i], "-")) == 2 ) {
-							loc.subController = loc.breadcrumbArray[loc.i];
-							loc.subSection    = ListToArray(loc.breadcrumbArray[loc.i], "-");
-							for (loc.x = 1; loc.x <= ArrayLen(loc.subSection); loc.x++) {
-								if ( loc.x == 1 ) {
-									loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.subSection[loc.x])), controller=loc.subSection[loc.x]) & loc.separator & "</li>";				
-								} else if ( loc.x == 2 && loc.i == ArrayLen(loc.pathInfoArray) ) { 
-									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & capitalize(getTranslation(loc.subSection[loc.x])) & "</li>";
+						if ( loc.i == ArrayLen(loc.breadcrumbArray) ) {
+							if ( isNumeric(loc.breadcrumbArray[loc.i]) && application.wheels.breadcrumbHideKey ) {
+							
+							} else {
+								if ( application.wheels.obfuscateURLs ) {
+									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & obfuscateParam(capitalize(getTranslation(loc.breadcrumbArray[loc.i]))) & "<li>";
+								
 								} else {
-									loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.subSection[loc.x])), controller=loc.subController) & loc.separator & "</li>";
+									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & capitalize(getTranslation(loc.breadcrumbArray[loc.i])) & "<li>";
 								}
 							}
+						
 						} else {
-							if ( loc.i == ArrayLen(loc.breadcrumbArray) ) {
-								if ( isNumeric(loc.breadcrumbArray[loc.i]) && application.wheels.breadcrumbHideKey ) {
-								} else {
-									if ( application.wheels.obfuscateURLs ) {
-										loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & obfuscateParam(capitalize(getTranslation(loc.breadcrumbArray[loc.i]))) & "<li>";
-									} else {
-										loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & capitalize(getTranslation(loc.breadcrumbArray[loc.i])) & "<li>";
-									}
-								}
+							if ( loc.i == 1 ) {
+								loc.url        = application.wheels.rootPath & "/" & loc.breadcrumbArray[loc.i];
+								loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), href=loc.url) & loc.separator & "</li>";
+							
 							} else {
-								if ( loc.i == 1 ) {
-									loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), controller=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
-								} else {
-									if ( isNumeric(loc.breadcrumbArray[loc.i]) && application.wheels.breadcrumbHideKey ) {
-
-									} else {
-										loc.z = loc.i + 1;
-										if ( isNumeric(loc.breadcrumbArray[loc.z]) ) {
-											if ( loc.z == ArrayLen(loc.breadcrumbArray) && application.wheels.breadcrumbHideKey ) {
-												loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), controller=loc.params.controller, action=loc.params.action, key=loc.breadcrumbArray[loc.z]) & "</li>";
-											} else {
-												loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), controller=loc.params.controller, action=loc.params.action, key=loc.breadcrumbArray[loc.z]) & loc.separator & "</li>";
-											}
-										}
-									}
-								}
+								loc.url        = loc.url & "/" & loc.breadcrumbArray[loc.i];
+								loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), href=loc.url) & loc.separator & "</li>";
 							}
 						}
 					}
-
 				}
 
 				loc.breadcrumb = "<ul class='" & application.wheels.breadcrumbClass & "'>" & loc.breadcrumb & "</ul>";
@@ -307,7 +290,7 @@
 		public string function initBreadcrumb(required array breadcrumbArray) {
 			var loc = arguments;
 
-			loc.breadcrumb = "";
+			loc.breadcrumb  = "";
 			loc.prefixClass = application.wheels.breadcrumbPrefixClass;
 			loc.separator   = application.wheels.breadcrumbSeparator;
 			loc.class       = application.wheels.breadcrumbActiveClass;
