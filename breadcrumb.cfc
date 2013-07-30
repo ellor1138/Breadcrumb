@@ -217,10 +217,10 @@
 							
 							} else {
 								if ( application.wheels.obfuscateURLs ) {
-									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & obfuscateParam(capitalize(getTranslation(loc.breadcrumbArray[loc.i]))) & "<li>";
+									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & obfuscateParam(capitalize(getTranslation(loc.breadcrumbArray[loc.i]))) & "</li>";
 								
 								} else {
-									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & capitalize(getTranslation(loc.breadcrumbArray[loc.i])) & "<li>";
+									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & capitalize(getTranslation(loc.breadcrumbArray[loc.i])) & "</li>";
 								}
 							}
 						
