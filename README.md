@@ -30,7 +30,7 @@ Problems or issues with this plugin can be found at https://github.com/ellor1138
 * Adobe ColdFusion 9 Developer Edition
 
 ## License
-Copyright 2012 Simon Allard
+Copyright 2013 Simon Allard
 				
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

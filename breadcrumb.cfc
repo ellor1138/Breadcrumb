@@ -156,91 +156,104 @@
 		 * ---------------------------------------------------------------------------------------------------
 		*/
 		public void function createBreadcrumbAndTitle(params) {
+			var loc = {};
 
-			if ( application.wheels.contentForBreadcrumb || application.wheels.contentForPageTitle ) {
-				// Manual breadcrumb creation
-				if ( isDefined("arguments.params") ) {
-					loc       = arguments;
-					loc.class = application.wheels.breadcrumbActiveClass;
-					
-					loc.breadcrumbArray = [];
+			loc.breadcrumb = "";
+			loc.separator  = application.wheels.breadcrumbSeparator;
 
-					for ( loc.i = 1; loc.i <= ArrayLen(loc.params); loc.i++) {
-						loc.breadcrumbArray[loc.i] = loc.params[loc.i].text;	
-					}
+			// Manual breadcrumb
+			if ( StructKeyExists(arguments, "params") ) {
+				loc.breadcrumbArray = arguments.params;
 
-					loc.breadcrumb      = initBreadcrumb(loc.breadcrumbArray);
-					loc.breadcrumbArray = loc.params;
+				for (loc.i = 1; loc.i LTE ArrayLen(loc.breadcrumbArray); loc.i++) {				
+					if (loc.i == ArrayLen(loc.breadcrumbArray) ) {
+						loc.breadcrumb = loc.breadcrumb & "<li class='" & application.wheels.breadcrumbActiveClass & "'>" & loc.breadcrumbArray[loc.i].text & "</li>";
 
-					for (loc.i = 1; loc.i LTE ArrayLen(loc.breadcrumbArray); loc.i++) {
-						if ( StructKeyExists(loc.breadcrumbArray[loc.i], "title") ) {
-							loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & capitalize(getTranslation(loc.breadcrumbArray[loc.i].title)) & "</li>";							
-						} else {
-							if ( loc.i == ArrayLen(loc.breadcrumbArray) ) {
-								loc.separator = "";
-							} else {
-								loc.separator = application.wheels.breadcrumbSeparator;
-							}
-							if ( loc.i == ArrayLen(loc.breadcrumbArray) && (!StructKeyExists(loc.breadcrumbArray[loc.i], "route") && !structKeyExists(loc.breadcrumbArray[loc.i], "controller") && !structKeyExists(loc.breadcrumbArray[loc.i], "action")) ) {
-								loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & loc.breadcrumbArray[loc.i].text & "</li>";
-							} else {
-								loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";	
-							}
-						}
-					}
-
-				// Automatic breadcrumb creation
-				} else {
-					var loc = {};
-
-					loc.params    = params;
-					loc.separator = application.wheels.breadcrumbSeparator;
-					loc.class     = application.wheels.breadcrumbActiveClass;
-
-					loc.breadcrumb      = "";
-					loc.pathInfoArray   = ListToArray(cgi.path_info, "/");
-					loc.breadcrumbArray = loc.pathInfoArray;
-					
-					loc.breadcrumb      = initBreadcrumb(loc.breadcrumbArray);
-					loc.breadcrumbArray = cleanBreadcrumbArray(loc.breadcrumbArray);
-
-					if ( StructKeyExists(loc.params, "appendTitle") ) {
-						ArrayAppend(loc.breadcrumbArray, loc.params.appendTitle);
-					}
-
-					// writeDump(#application.wheels.rootPath#);
-					// abort;
-
-					for (loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
-						if ( loc.i == ArrayLen(loc.breadcrumbArray) ) {
-							if ( isNumeric(loc.breadcrumbArray[loc.i]) && application.wheels.breadcrumbHideKey ) {
-							
-							} else {
-								if ( application.wheels.obfuscateURLs ) {
-									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & obfuscateParam(capitalize(getTranslation(loc.breadcrumbArray[loc.i]))) & "</li>";
-								
-								} else {
-									loc.breadCrumb = loc.breadCrumb & "<li class='" & loc.class & "'>" & capitalize(getTranslation(loc.breadcrumbArray[loc.i])) & "</li>";
-								}
-							}
-						
-						} else {
-							if ( loc.i == 1 ) {
-								loc.url        = application.wheels.rootPath & "/" & loc.breadcrumbArray[loc.i];
-								loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), href=loc.url) & loc.separator & "</li>";
-							
-							} else {
-								loc.url        = loc.url & "/" & loc.breadcrumbArray[loc.i];
-								loc.breadCrumb = loc.breadCrumb & "<li>" & linkTo(text=capitalize(getTranslation(loc.breadcrumbArray[loc.i])), href=loc.url) & loc.separator & "</li>";
-							}
-						}
+					} else {
+						loc.breadcrumb = loc.breadcrumb & "<li>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
 					}
 				}
 
-				loc.breadcrumb = "<ul class='" & application.wheels.breadcrumbClass & "'>" & loc.breadcrumb & "</ul>";
-				
-				addContentFor(loc.breadcrumb);
+			// Automatic breadcrumb
+			} else {
+				loc.url           	= application.wheels.rootPath;
+				loc.pathInfoArray 	= ListToArray(cgi.path_info, "/");
+				loc.breadcrumbArray = [];
+
+				// Add breadcrumb prefix link & text
+				if ( application.wheels.breadcrumbPrefix ) {
+					loc.args	   = {};
+					loc.args       = application.wheels.breadcrumbPrefixLink;
+					loc.args.text  = capitalize(getTranslation(application.wheels.breadcrumbPrefixText));
+					
+					loc.breadcrumbArray[1] = loc.args;
+				}
+
+				// Remove black listed controller/action
+				if ( Len(application.wheels.breadcrumbBlackList) ) {
+					loc.list = application.wheels.breadcrumbBlackList;
+
+					for (loc.i = 1; loc.i <= ListLen(loc.list); loc.i++) {
+						loc.find = ArrayFindNoCase(loc.pathInfoArray, ListGetAt(loc.list, loc.i));
+
+						if ( loc.find ) ArrayDeleteAt(loc.pathInfoArray, loc.find);
+					}
+				}
+
+				// Remove key
+				if ( application.wheels.breadcrumbHideKey && StructKeyExists(params, "key") ) {
+					loc.key  = params.key;
+					loc.find = ArrayFindNoCase(loc.pathInfoArray, loc.key);
+
+					if ( loc.find  ) ArrayDeleteAt(loc.pathInfoArray, loc.find);
+				}
+
+				// Add custom title
+				if ( StructKeyExists(params, "appendTitle") ) {
+					ArrayAppend(loc.pathInfoArray, params.appendTitle);
+
+					StructDelete(params, "appendTitle");
+				}
+
+				// Get constructed breadcrumb array count
+				loc.count = ArrayLen(loc.breadcrumbArray);
+
+				// Add breadcrumb bits from path info array
+				for (loc.i = 1; loc.i <= ArrayLen(loc.pathInfoArray); loc.i++) {
+					loc.count++;
+
+					loc.url = loc.url & "/" & loc.pathInfoArray[loc.i];
+
+					loc.args      = {};
+					loc.args.href = loc.url;
+					loc.args.text = capitalize(getTranslation(loc.pathInfoArray[loc.i]));
+
+					loc.breadcrumbArray[loc.count] = loc.args;
+				}
+
+				// Contruct final html list
+				for (loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
+					if ( loc.i == 1 && application.wheels.breadcrumbPrefix && Len(application.wheels.breadcrumbPrefixClass) ) {
+						if (loc.i == ArrayLen(loc.breadcrumbArray) ) {
+							loc.breadcrumb = "<li class='" & application.wheels.breadcrumbActiveClass & "'>" & loc.breadcrumbArray[loc.i].text & "</li>";
+						
+						} else {
+							loc.breadcrumb = "<li class='" & application.wheels.breadcrumbPrefixClass & "'>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
+						}
+					
+					} else if (loc.i == ArrayLen(loc.breadcrumbArray) ) {
+						loc.breadcrumb = loc.breadcrumb & "<li class='" & application.wheels.breadcrumbActiveClass & "'>" & loc.breadcrumbArray[loc.i].text & "</li>";	
+					
+					} else {
+						loc.breadcrumb = loc.breadcrumb & "<li>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
+					}
+				}
 			}
+
+			loc.breadcrumb = "<ul class='" & application.wheels.breadcrumbClass & "'>" & loc.breadcrumb & "</ul>";
+			
+			// Add breadcrumb to content
+			addContentFor(loc.breadcrumb);
 		}
 
 		/* ---------------------------------------------------------------------------------------------------
@@ -252,20 +265,23 @@
 		}
 
 		/* ---------------------------------------------------------------------------------------------------
-		 * @hint Add breadcrumb and page title to the contentFor function
+		 * @hint Add breadcrumb and page title to wheels contentFor function
 		 * ---------------------------------------------------------------------------------------------------
 		*/
 		public void function addContentFor(required string breadcrumb) {
 			var loc = arguments;
 
+			// Add breadcrumb
 			if ( application.wheels.contentForBreadcrumb ) {
 				contentFor(breadcrumb=loc.breadcrumb, overwrite=true);
 			}
 
+			// Clean & add page title
 			if ( application.wheels.contentForPageTitle ) {
 				if ( Len(application.wheels.pageTitlePrefix) ) {
 					loc.breadCrumb = application.wheels.pageTitlePrefix & application.wheels.breadcrumbSeparator & loc.breadCrumb;
 				}
+				
 				loc.title = ReReplace(loc.breadCrumb,'<(?!(/li)>)[^>]*>',' ','all');
 				loc.title = ReReplace(loc.title,'<[^>]*>',' ~ ','all');
 				loc.title = ReReplaceNoCase(loc.title,'~','','all');
@@ -284,61 +300,6 @@
 		}
 
 		/* ---------------------------------------------------------------------------------------------------
-		 * @hint Init breadcrumb (Add prefix elements to breadcrumb)
-		 * ---------------------------------------------------------------------------------------------------
-		*/
-		public string function initBreadcrumb(required array breadcrumbArray) {
-			var loc = arguments;
-
-			loc.breadcrumb  = "";
-			loc.prefixClass = application.wheels.breadcrumbPrefixClass;
-			loc.separator   = application.wheels.breadcrumbSeparator;
-			loc.class       = application.wheels.breadcrumbActiveClass;
-
-			if ( application.wheels.breadcrumbPrefix ) {
-				if ( ArrayLen(loc.breadcrumbArray) ) {
-					if ( !ArrayLen(StructFindValue(application.wheels.breadcrumbPrefixLink, loc.breadcrumbArray[1])) ) {
-						loc.text = getTranslation(application.wheels.breadcrumbPrefixText);
-						if ( ArrayLen(loc.breadcrumbArray) ) {
-							loc.args       = application.wheels.breadcrumbPrefixLink;
-							loc.args.text  = capitalize(loc.text);
-							loc.breadcrumb = "<li class='" & loc.prefixClass & "'>" & linkTo(argumentCollection=loc.args) & loc.separator & "</li>";
-						} else {
-							loc.breadcrumb = "<li class='" & loc.class & "'>" & capitalize(loc.text) & "</li>";
-						}
-					}
-				} else {
-					loc.text       = getTranslation(application.wheels.breadcrumbPrefixText);
-					loc.breadcrumb = "<li class='" & loc.class & "'>" & capitalize(loc.text) & "</li>"; 
-				}
-			}
-			return loc.breadcrumb;
-		}
-
-
-		/* ---------------------------------------------------------------------------------------------------
-		 * @hint Clean breadcrumb array (Remove prohibited word/action from array)
-		 * ---------------------------------------------------------------------------------------------------
-		*/
-		public array function cleanBreadcrumbArray(required array breadcrumbArray) {
-			var loc = arguments;
-
-			if ( application.wheels.obfuscateURLs ) {
-				for (loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
-					ArraySet(loc.breadcrumbArray, loc.i, loc.i, deobfuscateParam(loc.breadcrumbArray[loc.i]));
-				}
-			}
-
-			for (loc.i IN ListToArray(application.wheels.breadcrumbBlackList)) {
-				if ( ArrayContains(loc.breadcrumbArray, loc.i) ) {
-					ArrayDeleteAt(loc.breadcrumbArray, ArrayFind(loc.breadcrumbArray, loc.i));
-				}
-			}
-
-			return loc.breadcrumbArray;
-		}
-
-		/* ---------------------------------------------------------------------------------------------------
 		 * @hint Text translation
 		 * --> Use in conjunction with Localizator plugin
 		 * --> http://cfwheels.org/plugins/listing/89
@@ -347,6 +308,7 @@
 		public string function getTranslation(required string text) {
 			if ( application.wheels.breadcrumbIsLocalized ) {
 				return l(arguments.text);
+			
 			} else {
 				return arguments.text;
 			}

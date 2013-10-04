@@ -74,20 +74,6 @@
 								&nbsp;&nbsp;&nbsp;createBreadcrumbAndTitle();<br>
 								}
 							</div>
-							<hr>
-							<h4>Hyphen separator</h4>
-							<p>Since Wheels converts camelCase controllers to lowercase strings with hyphens as word delimiters in the address bar. You can separate the camelCase controllers to create two separate links.</p>
-							<div class="well">
-								<p style="border-bottom:1px solid ##333;"><strong>adminProject.cfc</strong></p>
-								public function edit() {<br>
-								&nbsp;&nbsp;&nbsp;params.separateHyphens = true;<br>
-								&nbsp;&nbsp;&nbsp;createBreadcrumbAndTitle();<br>
-								}
-							</div>
-							<div style="padding-top:20px !important; margin-bottom:20px;">
-								<img src="https://github.com/ellor1138/Breadcrumb/blob/master/src/images/breadcrumbHyphenCheck.png?raw=true" style="padding:10px; border:1px solid ##c4c4c4;">
-							</div>
-							<p><span class="label label-inverse">Note</span> This option only work with 2 words camelCase controller i.e., "editUser" or "viewInfo". Complex camelCase controller i.e., "editUserInfo", "viewInfoByCategory" won't be convert in separate links.</p>
 						</div>
 					</div>
 				</div>
