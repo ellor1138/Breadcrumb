@@ -42,7 +42,7 @@
 				application.wheels.contentForPageTitle = true;
 			}
 
-						// - SET DEFAULT LOCALIZATION FLAG
+			// - SET DEFAULT LOCALIZATION FLAG
 			// - set(breadcrumbIsLocalized="boolean") --> (config/settings.cfm)
 			if ( !isDefined("application.wheels.breadcrumbIsLocalized") ) {
 				application.wheels.breadcrumbIsLocalized = false;
@@ -202,7 +202,12 @@
 
 				// Remove key
 				if ( application.wheels.breadcrumbHideKey && StructKeyExists(params, "key") ) {
-					loc.key  = params.key;
+					loc.key = params.key;
+
+					if ( isDefined("application.wheels.lobotProtectionIsEnabled") && application.wheels.lobotProtectionIsEnabled ) {
+						loc.key = lobotEncryptKey(loc.key);
+					}
+
 					loc.find = ArrayFindNoCase(loc.pathInfoArray, loc.key);
 
 					if ( loc.find  ) ArrayDeleteAt(loc.pathInfoArray, loc.find);

@@ -1,6 +1,12 @@
 <cfoutput>
 	<div class="tab-pane" id="Log">
 		<dl class="dl-horizontal">
+			<dt>Version 2.0.1</dt>
+			<dd>October 8, 2013
+				<ul>
+					<li>Now compatible with Lobot plugin<br /><a href="https://github.com/ellor1138/Lobot" target="_blank">https://github.com/ellor1138/Lobot</a></li>
+				</ul>
+			</dd>
 			<dt>Version 2.0</dt>
 			<dd>October 4, 2013
 				<ul>
