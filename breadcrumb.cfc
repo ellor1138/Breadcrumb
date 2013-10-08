@@ -123,7 +123,7 @@
 			loc.plugin = {};
 			loc.plugin.author        = "Simon Allard";
 			loc.plugin.name          = "breadcrumb";
-			loc.plugin.version       = "2.0.0";
+			loc.plugin.version       = "2.0.1";
 			loc.plugin.compatibility = "1.1.8";
 			loc.plugin.project       = "https://github.com/ellor1138/Breadcrumb";
 			loc.plugin.documentation = "https://github.com/ellor1138/Breadcrumb/wiki";
