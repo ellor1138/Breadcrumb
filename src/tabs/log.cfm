@@ -2,9 +2,12 @@
 	<div class="tab-pane" id="Log">
 		<dl class="dl-horizontal">
 			<dt>Version 2.0.1</dt>
-			<dd>October 8, 2013
+			<dd>October 9, 2013
 				<ul>
-					<li>Now compatible with Lobot plugin<br /><a href="https://github.com/ellor1138/Lobot" target="_blank">https://github.com/ellor1138/Lobot</a></li>
+					<li>Now compatible with Lobot plugin<br />
+					<a href="https://github.com/ellor1138/Lobot" target="_blank">https://github.com/ellor1138/Lobot</a><br />
+					<a href="http://cfwheels.org/plugins/listing/95" target="_blank">http://cfwheels.org/plugins/listing/95</a>
+					</li>
 				</ul>
 			</dd>
 			<dt>Version 2.0</dt>
