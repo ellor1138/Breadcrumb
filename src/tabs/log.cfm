@@ -1,6 +1,13 @@
 <cfoutput>
 	<div class="tab-pane" id="Log">
 		<dl class="dl-horizontal">
+			<dt>Version 2.1</dt>
+			<dd>Agust 8, 2014
+				<ul>
+					<li>Compatible with Wheels 1.3</li>
+					<li>Remove Lobot plugin support</li>
+				</ul>
+			</dd>
 			<dt>Version 2.0.1</dt>
 			<dd>October 9, 2013
 				<ul>
