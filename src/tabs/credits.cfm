@@ -9,7 +9,7 @@
 			<dd>#loc.plugin.version#</dd>
 			<dt>Wheels compatibility</dt>
 			<dd>#loc.plugin.compatibility#</dd>
-			<dt>Release date</dt>
+			<dt>First release date</dt>
 			<dd>January 2013</dd>
 			<dt>Project home</dt>
 			<dd><a href="#loc.plugin.project#" target="_blank">#loc.plugin.project#</a></dd>
