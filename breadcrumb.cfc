@@ -273,7 +273,7 @@
 
 				// Remove key
 				if ( application.breadcrumb.breadcrumbHideKey && StructKeyExists(params, "key") ) {
-					loc.key = params.key;
+					loc.key = params.key;   
 
 					loc.find = ArrayFindNoCase(loc.pathInfoArray, loc.key);
 
