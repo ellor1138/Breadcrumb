@@ -204,10 +204,6 @@
 				if ( application.wheels.breadcrumbHideKey && StructKeyExists(params, "key") ) {
 					loc.key = params.key;
 
-					if ( isDefined("application.wheels.lobotProtectionIsEnabled") && application.wheels.lobotProtectionIsEnabled ) {
-						loc.key = lobotEncryptKey(loc.key);
-					}
-
 					loc.find = ArrayFindNoCase(loc.pathInfoArray, loc.key);
 
 					if ( loc.find  ) ArrayDeleteAt(loc.pathInfoArray, loc.find);
