@@ -1,6 +1,12 @@
 <cfoutput>
 	<div class="tab-pane" id="Log">
 		<dl class="dl-horizontal">
+			<dt>Version 2.1.0</dt>
+			<dd>August 8, 2014
+				<ul>
+					<li>Remove Lobot</li>
+				</ul>
+			</dd>
 			<dt>Version 2.0.1</dt>
 			<dd>October 9, 2013
 				<ul>

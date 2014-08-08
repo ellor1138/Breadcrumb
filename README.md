@@ -11,7 +11,6 @@ Breadcrumb is a breadcrumb trail navigation generator plugin for ColdFusion on W
 * Customize the hierarchy separator and styles of the breadcrumb trail navigation.
 * The plugin can also set the title of your HTML page based on the breadcrumb trail. You can also set the page title manually if needs be.
 * Can be use in conjunction with the <a href="https://github.com/ellor1138/Localizator" target="_blank">Localizator</a> plugin, to add localization (translation) capabilities.
-* Compatible with the <a href="https://github.com/ellor1138/Lobot" target="_blank">Lobot</a> plugin 
 
 ## The Latest Version
 * The latest version of this plugin can be found at the Github project page at https://github.com/ellor1138/Breadcrumb
