@@ -23,7 +23,7 @@
 		 * ------------------
 		*/
 		public function init() {
-			this.version = "1.3";
+			this.version = "1.1.8,1.3";
 
 			application.breadcrumb = {};
 			application.breadcrumb = $initBreadcrumbPluginSettings();
