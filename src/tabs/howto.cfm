@@ -84,6 +84,7 @@
 						<li><a href="##Automatic2" data-toggle="tab">Automatic usage</a></li>
 						<li><a href="##Manual2" data-toggle="tab">Manual usage</a></li>
 					</ul>
+
 					<div class="tab-content innercontent">
 						<div class="tab-pane active" id="Installation2">
 							<h4>Installation</h4>
@@ -94,19 +95,22 @@
 								&lt;/head&gt;
 							</div>
 						</div>
+
 						<div class="tab-pane" id="Automatic2">
 							<h4>Automatic usage</h4>
 							<p>The page title is generated from the createBreadcrumbAndTitle() function. If you've set contentForPageTitle() to TRUE, the createBreadcrumbAndTitle() function will automatically create the page title for you.</p>
 						</div>
+
 						<div class="tab-pane" id="Manual2">
 							<h4>Manual usage</h4>
-							<p>You can set the page title manually by passing a string in the setBreadcrumbPageTitle() function in your controller's action.</p>
+							<p>You can set the page title manually by passing a string in the breadcrumbSetPageTitle() function in your controller's action.</p>
 							<div class="well">
 								public function index() {<br>
-								&nbsp;&nbsp;&nbsp;setBreadcrumbPageTitle("Welcome!");<br>
+								&nbsp;&nbsp;&nbsp;breadcrumbSetPageTitle("Welcome!");<br>
 								}
 							</div>
-							<p><span class="label label-inverse">Info</span> Using the setBreadcrumbPageTitle() function will bypass the contentForPageTitle() check and the pageTitlePrefix() setting.</p>
+							<p><span class="label label-inverse">Info</span> Using the breadcrumbSetPageTitle() function will bypass the contentForPageTitle() check and the pageTitlePrefix() settings.</p>
+							<div class="alert alert-error">As of Breadcrumb 2.1 - <i><strong>setBreadcrumbPageTitle</strong></i> function is now deprecated.</div>
 						</div>
 					</div>
 				</div>

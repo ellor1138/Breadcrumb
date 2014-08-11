@@ -18,26 +18,164 @@
 			---------------------------------------------------------------------------------------------------
 		*/
 		
-		/* ---------------------------------------------------------------------------------------------------
-		 * @hint Constructor
-		 * ---------------------------------------------------------------------------------------------------
+		/* ------------------
+		 * @hint Init plugin
+		 * ------------------
 		*/
 		public function init() {
-			var loc = {};
-
 			this.version = "1.3";
 
 			application.breadcrumb = {};
-			application.breadcrumb = initBreadcrumbPluginSettings();
+			application.breadcrumb = $initBreadcrumbPluginSettings();
 
 			return this;
 		}
 
-		/* ---------------------------------------------------------------------------------------------------
-		 * @hint Return plugin settings
-		 * ---------------------------------------------------------------------------------------------------
+		/* --------------------------------------------------
+		 * @hint Return struct of Breadcrumb plugin settings
+		 * --------------------------------------------------
 		*/
-		public struct function initBreadcrumbPluginSettings() {
+		public function getBreadcrumbSettings() {
+			return application.breadcrumb;
+		}
+
+		/* -------------------------------------------------------------
+		 * @hint Create content for breadcrumb & page title (automatic)
+		 * -------------------------------------------------------------
+		*/
+		public void function createBreadcrumbAndTitle(params) {
+			var loc = {};
+
+			loc.breadcrumb = "";
+			loc.separator  = application.breadcrumb.breadcrumbSeparator;
+
+			// Manual breadcrumb
+			if ( StructKeyExists(arguments, "params") ) {
+				loc.breadcrumbArray = arguments.params;
+
+				for (loc.i = 1; loc.i LTE ArrayLen(loc.breadcrumbArray); loc.i++) {				
+					if (loc.i == ArrayLen(loc.breadcrumbArray) ) {
+						loc.breadcrumb = loc.breadcrumb & "<li class='" & application.breadcrumb.breadcrumbActiveClass & "'>" & loc.breadcrumbArray[loc.i].text & "</li>";
+
+					} else {
+						loc.breadcrumb = loc.breadcrumb & "<li>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
+					}
+				}
+
+			// Automatic breadcrumb
+			} else {
+				// Set application wheels
+				if ( StructKeyExists(application, "$wheels") ) {
+					loc.application = application.$wheels;
+
+				} else if (StructKeyExists(application, "wheels") ) {
+					loc.application = application.wheels;
+				}
+
+				loc.url           	= loc.application["rootPath"];
+				loc.pathInfoArray 	= ListToArray(cgi.path_info, "/");
+				loc.breadcrumbArray = [];
+
+				// Add breadcrumb prefix link & text
+				if ( application.breadcrumb.breadcrumbPrefix ) {
+					loc.args	  = {};
+					loc.args      = application.breadcrumb.breadcrumbPrefixLink;
+					loc.args.text = capitalize($getTranslation(application.breadcrumb.breadcrumbPrefixText));
+					
+					loc.breadcrumbArray[1] = loc.args;
+				}
+
+				// Remove black listed controller/action
+				if ( Len(application.breadcrumb.breadcrumbBlackList) ) {
+					loc.list = application.breadcrumb.breadcrumbBlackList;
+
+					for ( loc.i = 1; loc.i <= ListLen(loc.list); loc.i++ ) {
+						loc.find = ArrayFindNoCase(loc.pathInfoArray, ListGetAt(loc.list, loc.i));
+
+						if ( loc.find ) ArrayDeleteAt(loc.pathInfoArray, loc.find);
+					}
+				}
+
+				// Remove key
+				if ( application.breadcrumb.breadcrumbHideKey && StructKeyExists(params, "key") ) {
+					loc.key  = params.key;   
+					loc.find = ArrayFindNoCase(loc.pathInfoArray, loc.key);
+
+					if ( loc.find ) {
+						ArrayDeleteAt(loc.pathInfoArray, loc.find);
+					}
+				}
+
+				// Add custom title
+				if ( StructKeyExists(params, "appendTitle") ) {
+					ArrayAppend(loc.pathInfoArray, params.appendTitle);
+
+					StructDelete(params, "appendTitle");
+				}
+
+				// Get constructed breadcrumb array count
+				loc.count = ArrayLen(loc.breadcrumbArray);
+
+				// Add breadcrumb bits from path info array
+				for ( loc.i = 1; loc.i <= ArrayLen(loc.pathInfoArray); loc.i++ ) {
+					loc.count++;
+
+					loc.url = loc.url & "/" & loc.pathInfoArray[loc.i];
+
+					loc.args      = {};
+					loc.args.href = loc.url;
+					loc.args.text = capitalize($getTranslation(loc.pathInfoArray[loc.i]));
+
+					loc.breadcrumbArray[loc.count] = loc.args;
+				}
+
+				// Contruct final html list
+				for ( loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++ ) {
+					if ( loc.i == 1 && application.breadcrumb.breadcrumbPrefix && Len(application.breadcrumb.breadcrumbPrefixClass) ) {
+						if ( loc.i == ArrayLen(loc.breadcrumbArray) ) {
+							loc.breadcrumb = "<li class='" & application.breadcrumb.breadcrumbActiveClass & "'>" & loc.breadcrumbArray[loc.i].text & "</li>";
+						
+						} else {
+							loc.breadcrumb = "<li class='" & application.breadcrumb.breadcrumbPrefixClass & "'>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
+						}
+					
+					} else if ( loc.i == ArrayLen(loc.breadcrumbArray) ) {
+						loc.breadcrumb = loc.breadcrumb & "<li class='" & application.breadcrumb.breadcrumbActiveClass & "'>" & loc.breadcrumbArray[loc.i].text & "</li>";	
+					
+					} else {
+						loc.breadcrumb = loc.breadcrumb & "<li>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
+					}
+				}
+			}
+
+			loc.breadcrumb = "<ul class='" & application.breadcrumb.breadcrumbClass & "'>" & loc.breadcrumb & "</ul>";
+			
+			// Add breadcrumb to content
+			$addBreadcrumbContentFor(loc.breadcrumb);
+		}
+
+		/* ----------------------------------------
+		 * @hint Set page title <title>...</title>
+		 * ----------------------------------------
+		*/
+		public string function breadcrumbSetPageTitle(required string title="") {
+			contentFor(pageTitle=arguments.title, overwrite=true);
+		}
+
+		// Deprecated use breadcrumbSetPageTitle instead
+		public string function setBreadcrumbPageTitle(required string title="") {
+			breadcrumbSetPageTitle(argumentCollection=arguments);
+		}
+
+		/* ---------------------------------------------------------------------------------------------------
+		/* "PRIVATE" FUNCTIONS
+		/* ---------------------------------------------------------------------------------------------------
+
+		/* -----------------------------
+		 * @hint Return plugin settings
+		 * -----------------------------
+		*/
+		public struct function $initBreadcrumbPluginSettings() {
 			var loc  = {};
 			var temp = {};
 
@@ -51,11 +189,10 @@
 				temp.application = application.wheels;
 			}
 
-			/* ---------------------------------------------------------------------------------------------------
+			/* --------------------------------------------------------------------
 			 * APPLY DEFAULT SETTINGS IF NOT SUPPLIED IN --> (config/settings.cfm)
-		 	 * ---------------------------------------------------------------------------------------------------
+		 	 * --------------------------------------------------------------------
 			*/
-			
 			// - SET DEFAULT BREADCRUMB FLAG
 			// - set(contentForBreadcrumb="boolean") --> (config/settings.cfm)
 			if ( StructKeyExists(application[temp.wheels], "contentForBreadcrumb") ) {
@@ -173,16 +310,7 @@
 				loc.pageTitlePrefix = cgi.remote_addr;
 			}
 
-			// Plugin configuraitons
-			loc.plugin = {};
-			loc.plugin.author        = "Simon Allard";
-			loc.plugin.name          = "breadcrumb";
-			loc.plugin.version       = "2.1.0";
-			loc.plugin.compatibility = "1.3";
-			loc.plugin.project       = "https://github.com/ellor1138/Breadcrumb";
-			loc.plugin.documentation = "https://github.com/ellor1138/Breadcrumb/wiki";
-			loc.plugin.issues        = "https://github.com/ellor1138/Breadcrumb/issues";
-
+			// Plugin settings
 			loc.settings = {};
 			loc.settings.isLocalized          = loc.breadcrumbIsLocalized;
 			loc.settings.contentForBreadcrumb = loc.contentForBreadcrumb;
@@ -202,145 +330,24 @@
 			loc.settings.page = {};
 			loc.settings.page.titlePrefix = loc.pageTitlePrefix;
 
+			// Plugin configuraitons
+			loc.plugin = {};
+			loc.plugin.author        = "Simon Allard";
+			loc.plugin.name          = "breadcrumb";
+			loc.plugin.version       = "2.1";
+			loc.plugin.compatibility = "1.1.8, 1.3";
+			loc.plugin.project       = "https://github.com/ellor1138/Breadcrumb";
+			loc.plugin.documentation = "https://github.com/ellor1138/Breadcrumb/wiki";
+			loc.plugin.issues        = "https://github.com/ellor1138/Breadcrumb/issues";
+
 			return loc;
-		}
-
-		// Get plugin settings
-		public function getBreadcrumbSettings() {
-			var loc = {};
-
-			loc = application.breadcrumb;
-
-			return loc;
-		}
-
-		/* ---------------------------------------------------------------------------------------------------
-		 * @hint Create content for breadcrumb & page title (automatic)
-		 * ---------------------------------------------------------------------------------------------------
-		*/
-		public void function createBreadcrumbAndTitle(params) {
-			var loc = {};
-
-			loc.breadcrumb = "";
-			loc.separator  = application.breadcrumb.breadcrumbSeparator;
-
-			// Manual breadcrumb
-			if ( StructKeyExists(arguments, "params") ) {
-				loc.breadcrumbArray = arguments.params;
-
-				for (loc.i = 1; loc.i LTE ArrayLen(loc.breadcrumbArray); loc.i++) {				
-					if (loc.i == ArrayLen(loc.breadcrumbArray) ) {
-						loc.breadcrumb = loc.breadcrumb & "<li class='" & application.breadcrumb.breadcrumbActiveClass & "'>" & loc.breadcrumbArray[loc.i].text & "</li>";
-
-					} else {
-						loc.breadcrumb = loc.breadcrumb & "<li>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
-					}
-				}
-
-			// Automatic breadcrumb
-			} else {
-				// Set application wheels path
-				if ( StructKeyExists(application, "$wheels") ) {
-					loc.application = application.$wheels;
-
-				} else if (StructKeyExists(application, "wheels") ) {
-					loc.application = application.wheels;
-				}
-
-				loc.url           	= loc.application["rootPath"];
-				loc.pathInfoArray 	= ListToArray(cgi.path_info, "/");
-				loc.breadcrumbArray = [];
-
-				// Add breadcrumb prefix link & text
-				if ( application.breadcrumb.breadcrumbPrefix ) {
-					loc.args	   = {};
-					loc.args       = application.breadcrumb.breadcrumbPrefixLink;
-					loc.args.text  = capitalize(getTranslation(application.breadcrumb.breadcrumbPrefixText));
-					
-					loc.breadcrumbArray[1] = loc.args;
-				}
-
-				// Remove black listed controller/action
-				if ( Len(application.breadcrumb.breadcrumbBlackList) ) {
-					loc.list = application.breadcrumb.breadcrumbBlackList;
-
-					for (loc.i = 1; loc.i <= ListLen(loc.list); loc.i++) {
-						loc.find = ArrayFindNoCase(loc.pathInfoArray, ListGetAt(loc.list, loc.i));
-
-						if ( loc.find ) ArrayDeleteAt(loc.pathInfoArray, loc.find);
-					}
-				}
-
-				// Remove key
-				if ( application.breadcrumb.breadcrumbHideKey && StructKeyExists(params, "key") ) {
-					loc.key = params.key;   
-
-					loc.find = ArrayFindNoCase(loc.pathInfoArray, loc.key);
-
-					if ( loc.find  ) ArrayDeleteAt(loc.pathInfoArray, loc.find);
-				}
-
-				// Add custom title
-				if ( StructKeyExists(params, "appendTitle") ) {
-					ArrayAppend(loc.pathInfoArray, params.appendTitle);
-
-					StructDelete(params, "appendTitle");
-				}
-
-				// Get constructed breadcrumb array count
-				loc.count = ArrayLen(loc.breadcrumbArray);
-
-				// Add breadcrumb bits from path info array
-				for (loc.i = 1; loc.i <= ArrayLen(loc.pathInfoArray); loc.i++) {
-					loc.count++;
-
-					loc.url = loc.url & "/" & loc.pathInfoArray[loc.i];
-
-					loc.args      = {};
-					loc.args.href = loc.url;
-					loc.args.text = capitalize(getTranslation(loc.pathInfoArray[loc.i]));
-
-					loc.breadcrumbArray[loc.count] = loc.args;
-				}
-
-				// Contruct final html list
-				for (loc.i = 1; loc.i <= ArrayLen(loc.breadcrumbArray); loc.i++) {
-					if ( loc.i == 1 && application.breadcrumb.breadcrumbPrefix && Len(application.breadcrumb.breadcrumbPrefixClass) ) {
-						if (loc.i == ArrayLen(loc.breadcrumbArray) ) {
-							loc.breadcrumb = "<li class='" & application.breadcrumb.breadcrumbActiveClass & "'>" & loc.breadcrumbArray[loc.i].text & "</li>";
-						
-						} else {
-							loc.breadcrumb = "<li class='" & application.breadcrumb.breadcrumbPrefixClass & "'>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
-						}
-					
-					} else if (loc.i == ArrayLen(loc.breadcrumbArray) ) {
-						loc.breadcrumb = loc.breadcrumb & "<li class='" & application.breadcrumb.breadcrumbActiveClass & "'>" & loc.breadcrumbArray[loc.i].text & "</li>";	
-					
-					} else {
-						loc.breadcrumb = loc.breadcrumb & "<li>" & linkTo(argumentCollection=loc.breadcrumbArray[loc.i]) & loc.separator & "</li>";
-					}
-				}
-			}
-
-			loc.breadcrumb = "<ul class='" & application.breadcrumb.breadcrumbClass & "'>" & loc.breadcrumb & "</ul>";
-			
-			// Add breadcrumb to content
-			addContentFor(loc.breadcrumb);
-		}
-
-		/* ---------------------------------------------------------------------------------------------------
-		 * @hint Set page title <title>...</title>
-		 * ---------------------------------------------------------------------------------------------------
-		*/
-		public string function setBreadcrumbPageTitle(required string title="") {
-			contentFor(pageTitle=arguments.title, overwrite=true);
 		}
 
 		/* ---------------------------------------------------------------------------------------------------
 		 * @hint Add breadcrumb and page title to wheels contentFor function
 		 * ---------------------------------------------------------------------------------------------------
 		*/
-		public void function addContentFor(required string breadcrumb) {
+		public void function $addBreadcrumbContentFor(required string breadcrumb) {
 			var loc = arguments;
 
 			// Add breadcrumb
@@ -375,9 +382,10 @@
 		 * @hint Text translation
 		 * --> Use in conjunction with Localizator plugin
 		 * --> http://cfwheels.org/plugins/listing/89
+		 * --> https://github.com/ellor1138/Localizator
 		 * ---------------------------------------------------------------------------------------------------
 		*/
-		public string function getTranslation(required string text) {
+		public string function $getTranslation(required string text) {
 			if ( application.breadcrumb.breadcrumbIsLocalized ) {
 				return l(arguments.text);
 			
