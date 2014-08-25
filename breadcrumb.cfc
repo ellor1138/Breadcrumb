@@ -150,7 +150,7 @@
 
 			// Breadcrumb label
 			if ( application.breadcrumb.breadcrumbLabel ) {
-				loc.breadcrumb = "<div class='" & application.breadcrumb.breadcrumbLabelClass & "'>" & application.breadcrumb.breadcrumbLabelText & "</div>" & loc.breadcrumb;
+				loc.breadcrumb = "<div class='" & application.breadcrumb.breadcrumbLabelClass & "'>" & $getTranslation(application.breadcrumb.breadcrumbLabelText) & "</div>" & loc.breadcrumb;
 			}
 
 			// Final construct
@@ -404,7 +404,7 @@
 				if ( application.breadcrumb.breadcrumbPrefix ) {
 					loc.separator = ReReplaceNoCase(application.breadcrumb.breadcrumbSeparator,'<[^>]*>','','all');
 					
-					loc.title = ReplaceNoCase(loc.title,l(application.breadcrumb.breadcrumbPrefixText),'','all');
+					loc.title = ReplaceNoCase(loc.title, $getTranslation(application.breadcrumb.breadcrumbPrefixText),'','all');
 					loc.title = ReplaceNoCase(loc.title, '#loc.separator##loc.separator#','#loc.separator#','all');
 					loc.title = ReplaceNoCase(loc.title, '#loc.separator#','','');
 					loc.title = ReplaceNoCase(loc.title, '#loc.separator#',' #loc.separator# ','all');

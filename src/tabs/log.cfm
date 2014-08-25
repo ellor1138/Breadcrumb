@@ -8,6 +8,7 @@
 					<li>Addition of breadcrumbLabel() setting</li>
 					<li>Addition of breadcrumbLabelText() setting</li>
 					<li>Addition of breadcrumbLabelClass() setting</li>
+					<li>Bug fixes</li>
 				</ul>
 			</dd>
 			<dt>Version 2.1</dt>
