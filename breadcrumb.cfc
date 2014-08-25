@@ -148,6 +148,12 @@
 				}
 			}
 
+			// Breadcrumb label
+			if ( application.breadcrumb.breadcrumbLabel ) {
+				loc.breadcrumb = "<div class='" & application.breadcrumb.breadcrumbLabelClass & "'>" & application.breadcrumb.breadcrumbLabelText & "</div>" & loc.breadcrumb;
+			}
+
+			// Final construct
 			loc.breadcrumb = "<ul class='" & application.breadcrumb.breadcrumbClass & "'>" & loc.breadcrumb & "</ul>";
 			
 			// Add breadcrumb to content
@@ -301,6 +307,33 @@
 				loc.breadcrumbHideKey = false;
 			}
 
+			// - SET DEFAULT BREADCRUMB LABEL
+			// - set(breadcrumbLabel=boolean) --> (config/settings.cfm)
+			if ( StructKeyExists(application[temp.wheels], "breadcrumbLabel") ) {
+				loc.breadcrumbLabel = application[temp.wheels].breadcrumbLabel;
+
+			} else {
+				loc.breadcrumbLabel = false;
+			}
+
+			// - SET DEFAULT BREADCRUMB LABEL TEXT
+			// - set(breadcrumbLabel="You are here: ") --> (config/settings.cfm)
+			if ( StructKeyExists(application[temp.wheels], "breadcrumbLabelText") ) {
+				loc.breadcrumbLabelText = application[temp.wheels].breadcrumbLabelText;
+
+			} else {
+				loc.breadcrumbLabelText = "You are here: ";
+			}
+
+			// - SET DEFAULT BREADCRUMB LABEL CLASS
+			// - set(breadcrumbBlackList="create,edit,update") --> (config/settings.cfm)
+			if ( StructKeyExists(application[temp.wheels], "breadcrumbLabelClass") ) {
+				loc.breadcrumbLabelClass = application[temp.wheels].breadcrumbLabelClass;
+
+			} else {
+				loc.breadcrumbLabelClass = "breadcrumb-label";
+			}
+
 			// SET DEFAULT PAGE TITLE PREFIX
 			// - set(pageTitlePrefix="string") --> (config/settings.cfm)
 			if ( StructKeyExists(application[temp.wheels], "pageTitlePrefix") ) {
@@ -326,6 +359,9 @@
 			loc.settings.breadcrumb.separator   = loc.breadcrumbSeparator;
 			loc.settings.breadcrumb.blackList   = loc.breadcrumbBlackList;
 			loc.settings.breadcrumb.hideKey     = loc.breadcrumbHideKey;
+			loc.settings.breadcrumb.label       = loc.breadcrumbLabel;
+			loc.settings.breadcrumb.labelText   = loc.breadcrumbLabelText;
+			loc.settings.breadcrumb.labelClass  = loc.breadcrumbLabelClass;
 			
 			loc.settings.page = {};
 			loc.settings.page.titlePrefix = loc.pageTitlePrefix;
@@ -334,7 +370,7 @@
 			loc.plugin = {};
 			loc.plugin.author        = "Simon Allard";
 			loc.plugin.name          = "breadcrumb";
-			loc.plugin.version       = "2.1";
+			loc.plugin.version       = "2.1.1";
 			loc.plugin.compatibility = "1.1.8, 1.3";
 			loc.plugin.project       = "https://github.com/ellor1138/Breadcrumb";
 			loc.plugin.documentation = "https://github.com/ellor1138/Breadcrumb/wiki";

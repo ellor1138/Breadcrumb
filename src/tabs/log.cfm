@@ -1,6 +1,15 @@
 <cfoutput>
 	<div class="tab-pane" id="Log">
 		<dl class="dl-horizontal">
+			<dt>Version 2.1.1</dt>
+			<dd>Agust 25, 2014
+				<ul>
+					<li>New settings to add a label before the breadcrumb</li>
+					<li>Addition of breadcrumbLabel() setting</li>
+					<li>Addition of breadcrumbLabelText() setting</li>
+					<li>Addition of breadcrumbLabelClass() setting</li>
+				</ul>
+			</dd>
 			<dt>Version 2.1</dt>
 			<dd>Agust 11, 2014
 				<ul>

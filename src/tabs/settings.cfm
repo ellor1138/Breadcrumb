@@ -75,6 +75,25 @@
 								<li><u>set(breadcrumbHideKey=boolean)</u></li>
 							</ul>
 						</dd>
+
+						<dt>Label <span class="label label-warning" style="font-weight:normal;">New</span><span class="pull-right" style="font-weight:normal;">Default: false</span></dt>
+						<dd>You can set a "label" to appear before the breadcrumb.
+							<ul>
+								<li><u>set(breadcrumbLabel=boolean)</u></li>
+							</ul>
+						</dd>
+						<dt>Label text <span class="label label-warning" style="font-weight:normal;">New</span><span class="pull-right" style="font-weight:normal;">Default: "You are here: "</span></dt>
+						<dd>This the configuration to set the text (label) to appear before the breadcrumb.
+							<ul>
+								<li><u>set(breadcrumbLabelText="String")</u></li>
+							</ul>
+						</dd>
+						<dt>Label class <span class="label label-warning" style="font-weight:normal;">New</span><span class="pull-right" style="font-weight:normal;">Default: "breadcrumb-label"</span></dt>
+						<dd>This is the configuration to set the label class.
+							<ul>
+								<li><u>set(breadcrumbLabelClass="string")</u></li>
+							</ul>
+						</dd>
 					</dl>
 				</div>
 				<div class="tab-pane" id="Pagetitle1">
