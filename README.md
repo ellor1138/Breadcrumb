@@ -14,7 +14,6 @@ Breadcrumb is a breadcrumb trail navigation generator plugin for ColdFusion on W
 
 ## The Latest Version
 * The latest version of this plugin can be found at the Github project page at https://github.com/ellor1138/Breadcrumb
-* The latest version of this plugin can also be found at the CFWheels website at http://cfwheels.org/plugins/listing/90
 
 ## Documentation
 Documentation for this project can be found at https://github.com/ellor1138/Breadcrumb/wiki
