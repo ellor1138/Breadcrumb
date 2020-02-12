@@ -29,9 +29,7 @@ Problems or issues with this plugin can be found at https://github.com/ellor1138
 ##### I have tested this plugin on the following CFML engines:
 * Adobe ColdFusion 9 Developer Edition
 
-## License
-Copyright 2014 Simon Allard
-				
+## License			
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
