@@ -23,11 +23,13 @@ Problems or issues with this plugin can be found at https://github.com/ellor1138
 
 ## Requirements
 ##### I have tested this plugin with the following CFWheels frameworks:
+* ColdFusion on Wheels 1.4.6
 * ColdFusion on Wheels 1.3
 * ColdFusion on Wheels 1.1.8
 
 ##### I have tested this plugin on the following CFML engines:
-* Adobe ColdFusion 9 Developer Edition
+* Adobe ColdFusion 2018
+* Adobe ColdFusion 9
 
 ## License			
 Licensed under the Apache License, Version 2.0 (the "License");
